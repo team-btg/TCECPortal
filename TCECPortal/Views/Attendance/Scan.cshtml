@@ -1,0 +1,75 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<body>
+    Loading...
+    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@9.3.1/dist/dbr.js"></script>
+    <script>
+        /** LICENSE ALERT - README
+         * To use the library, you need to first specify a license key using the API "license" as shown below.
+         */
+
+        Dynamsoft.DBR.BarcodeReader.license = 'DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAxNTE5MzQ2LVRYbFhaV0pRY205cVgyUmljZyIsIm9yZ2FuaXphdGlvbklEIjoiMTAxNTE5MzQ2IiwiY2hlY2tDb2RlIjotMzI3MzU1OTg3fQ==';
+
+        /**
+         * You can visit https://www.dynamsoft.com/customer/license/trialLicense?utm_source=github&product=dbr&package=js to get your own trial license good for 30 days.
+         * Note that if you downloaded this sample from Dynamsoft while logged in, the above license key may already be your own 30-day trial license.
+         * For more information, see https://www.dynamsoft.com/barcode-reader/programming/javascript/user-guide/?ver=9.3.1&utm_source=github#specify-the-license or contact support@dynamsoft.com.
+         * LICENSE ALERT - THE END
+         */
+
+        (async function() {
+            try {
+                const scanner = await Dynamsoft.DBR.BarcodeScanner.createInstance();
+                /**
+                 * 'onFrameRead' is triggered after the library finishes reading a frame image.
+                 * There can be multiple barcodes on one image.
+                 */
+                scanner.onFrameRead = results => {
+                    console.log("Barcodes on one frame:");
+                    for (let result of results) {
+                        const format = result.barcodeFormat ? result.barcodeFormatString : result.barcodeFormatString_2;
+                        console.log(format + ": " + result.barcodeText);
+                    }
+                };
+                /**
+                 * 'onUniqueRead' is  triggered only when a 'new' barcode is found.
+                 * The amount of time that the library 'remembers' a barcode is defined by
+                 * "duplicateForgetTime" in "ScanSettings". By default it is set to 3000 ms.
+                 */
+                scanner.onUniqueRead = (txt, result) => {
+                    alert(txt);
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Attendance/ScannedQR',
+                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8', // when we use .serialize() this generates the data in query string format. this needs the default contentType (default content type is: contentType: 'application/x-www-form-urlencoded; charset=UTF-8') so it is optional, you can remove it
+                        data: { "code": txt },
+                        success: function (result) {
+                            alert('Your attendance is now submitted. ');                            
+                        },
+                        error: function () {
+                            alert('Failed to receive the Data'); 
+                        }
+                    })
+                }
+                /**
+                 * 'show()' opens the camera and shows the video stream on the page.
+                 * After that, the library starts to scan the frame images continuously.
+                 */
+                await scanner.show();
+            } catch (ex) {
+                let errMsg;
+                if (ex.message.includes("network connection error")) {
+                    errMsg = "Failed to connect to Dynamsoft License Server: network connection error. Check your Internet connection or contact Dynamsoft Support (support@dynamsoft.com) to acquire an offline license.";
+                } else {
+                    errMsg = ex.message||ex;
+                }
+                console.error(errMsg);
+                alert(errMsg);
+            }
+        })();
+    </script>
+</body>

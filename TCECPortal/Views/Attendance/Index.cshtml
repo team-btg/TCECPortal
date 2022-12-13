@@ -1,0 +1,83 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Attendance";
+}
+
+@using TCECPortal.Controllers
+
+@model AttendanceQR;
+
+@using (Html.BeginForm("GenerateQRCode", "Attendance", FormMethod.Post))
+{
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Default box -->
+            <div class="card card-default">
+                <div class="card-header">
+                    <h3 class="card-title">Scan for Attendance</h3>
+                </div>
+                <div class="card-body col-sm-6 mx-auto">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="col-sm-6 col-form-label">Valid until</label>
+                            <div class="input-group date col-sm-6" id="reservationdatetime" data-target-input="nearest">
+                                @Html.TextBoxFor(m => m.ValidUntil, new
+                           {
+                               @class = "form-control datetimepicker-input"
+,
+                               data_target = "#reservationdatetime"
+                           })
+                                <div class="input-group-append" data-target="#reservationdatetime" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" align="center">
+                            @if (Model != null && !string.IsNullOrEmpty(Model.QRCodeImage))
+                            {
+                                <img src="@Url.Content(Model.QRCodeImage)" alt="QR Code" style="height:350px; width: 350px" />
+                            }
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <button type="submit" class="btn btn-danger btn-block">
+                                        Generate QR Code
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.card -->
+            <!-- Default box -->
+            <div class="card card-default">
+                <div class="card-header">
+                    <h3 class="card-title">Attendance - History</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                             
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                             
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.card -->
+        </div>
+
+
+    </section>
+    <!-- /.content -->
+}

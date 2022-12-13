@@ -1,0 +1,165 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Profile";
+}
+
+@using TCECPortal.Models
+@model UserModel;
+  
+<section class="content">
+    <div class="container-fluid">
+        @using (Html.BeginForm("UpdateUser", "UserProfile", FormMethod.Post))
+        {
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- Profile Image -->
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <h3 class="card-title">Personal Info</h3>
+                        </div>
+                        <div class="card-body box-profile">
+                            <div class="text-center">
+                                <img class="profile-user-img img-fluid img-circle"
+                                     src="https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=10159314601581295&height=50&width=50&ext=1672724879&hash=AeSNaBsviB1WSRXhv1Y"
+                                     alt="User profile picture">
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="inputName" class="col-sm-4 col-form-label">Last Name</label>
+                                <div class="col-sm-12">
+                                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Last Name" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputEmail" class="col-sm-4 col-form-label">First Name</label>
+                                <div class="col-sm-12">
+                                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "First Name" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputName2" class="col-sm-4 col-form-label">M.I.</label>
+                                <div class="col-sm-12">
+                                    @Html.TextBoxFor(m => m.MiddleInitial, new { @class = "form-control", @placeholder = "Middle Initial" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">Birthday</label>
+                                <div class="input-group date col-sm-12" id="reservationdate" data-target-input="nearest">
+                                    @Html.TextBoxFor(m => m.BirthDate, new
+                               {
+                                   @class = "form-control datepicker-input"
+,
+                                   data_target = "#reservationdate",
+                                   @placeholder = "Birthday"
+                               })
+                                    <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">Email</label>
+                                <div class="col-sm-12">
+                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Email" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">Contact No.</label>
+                                <div class="col-sm-12">
+                                    @Html.TextBoxFor(m => m.MobilePhone, new
+                               {
+                                   @class = "form-control",
+                                   @placeholder = "Mobile/Phone Number"
+          ,
+                                   data_inputmask = "'mask': ['999-999-9999 [x99999]', '+099 99 99 9999[9]-9999']"
+          ,
+                                   data_mask = ""
+                               })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputExperience" class="col-sm-4 col-form-label">Address</label>
+                                <div class="col-sm-12">
+                                    @Html.TextAreaFor(m => m.Address, new { @class = "form-control", @placeholder = "Address" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">Gender</label>
+                                <div class="col-sm-12">
+                                    @Html.DropDownListFor(m => m.Gender, new SelectList(Enum.GetValues(typeof(Gender)))
+       , "Select Gender"
+       , new { @class = "form-control custom-select" })
+                                </div>
+                            </div>
+                            @*<div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Skills</label>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox"> I agree to the <a href="#">terms and conditions</a>
+                                        </label>
+                                    </div>
+                                </div>*@
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <button type="submit" class="btn btn-danger btn-block">
+                                        <i class="fas fa-save"></i> Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <h3 class="card-title">Club Info</h3>
+                        </div>
+                        <div class="card-body box-profile">
+                            <div class="form-group row">
+                                <div class="col-sm-4 icheck-primary d-inline">
+                                    @Html.CheckBoxFor(m => m.isActive, new { @class = "form-control" })
+                                    @Html.LabelFor(m => m.isActive, "Active?")
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputName2" class="col-sm-4 col-form-label">Club Position</label>
+                                <div class="col-sm-12">
+                                    @Html.TextBoxFor(m => m.Postion, new { @class = "form-control", @placeholder = "Club Position" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">Joined Date</label>
+                                <div class="input-group date col-sm-12" id="joinedDate" data-target-input="nearest">
+                                    @Html.TextBoxFor(m => m.JoinedDate, new
+                               {
+                                   @class = "form-control datepicker-input"
+,
+                                   data_target = "#joinedDate",
+                                   @placeholder = "Joined Date"
+                               })
+                                    <div class="input-group-append" data-target="#joinedDate" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- /.row -->
+        }
+    </div><!-- /.container-fluid -->
+    <div class="col-sm-6">
+        @using (Html.BeginForm("ExternalLogin", "UserProfile", FormMethod.Post))
+        {
+            <button type="submit" class="btn btn-primary btn-block">
+                <i class="fab fa-facebook"></i> Link Facebook
+            </button>
+        }
+    </div>
+</section>
+ 
+ 

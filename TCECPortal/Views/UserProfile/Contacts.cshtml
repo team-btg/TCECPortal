@@ -1,0 +1,85 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Contacts";
+}
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-default">
+            <div class="card-header">
+                <h3 class="card-title">Member List</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="tblMembers" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Last Name</th>
+                                    <th>First Name</th>
+                                    <th>Mobile No.</th>
+                                    <th>Active?</th>
+                                    <th>Address</th>
+                                    <th>View Profile</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        function ViewMember(element) {
+            var code = $(element).closest('tr').find('input[type=hidden]').val();
+            window.location.href = "/UserProfile/Profile?userId=" + code;
+        }
+        $(document).ready(function () { 
+            LoadListing();
+        });
+
+        function LoadListing() {
+            var empdata = [];
+
+            $.ajax({
+                type: "POST",
+                url: "/UserProfile/AjaxMethod",
+                async: false,
+                success: function (data) {
+                    $.each(data, function (key, value) {
+                        var editbtn = "<a onclick='ViewMember(this)' class='btn btn-primary'>View</a>";
+                        var hdn = "<input type='hidden' value=" + value.userId + " />";
+                        var action = editbtn + hdn;
+                        empdata.push([value.lastName, value.firstName, value.mobilePhone, value.isActive, value.address, action])
+                    })
+                },
+                failure: function (response) {
+                    alert(response.d);
+                },
+                error: function (response) {
+                    alert(response.d);
+                }
+            });
+              
+            $("#tblMembers").DataTable( 
+                {
+                    bLengthChange: true,
+                    lengthMenu: [[5, 10, -1], [5, 10, "All"]],
+                    bFilter: true,
+                    bSort: true,
+                    bPaginate: true,
+                    data: empdata,
+                     
+                });
+        };
+         
+    </script>
+
+}
